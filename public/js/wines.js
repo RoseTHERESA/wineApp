@@ -1,25 +1,23 @@
 $(function() {
-	console.log("Working!");
 	function loadWines(){
 		$.getJSON("/wines").done(function(data){
 			data.wines.forEach(function(wine){
 				var html = wineHtml(wine);
 				$('body').append(html);
 			});
-			console.log(data);
+			
 		});
 	}
 
 	function wineHtml(wine) {
-		return '<div data-id="' + wine._id + '"><p><a href="/wines/' + wine._id + '/">' + wine.varietal + 
-           '</a></p><p>"' + wine.vintage + '" alt="label image" height=200 width=200></p>' +
+		return '<br><div data-id="' + wine._id + '"><p><a href="/wines/' + wine._id + '/">' + wine.varietal + 
+           '</a></p><p>' + wine.vintage + '</p><p>' + wine.winery + '</p>'
            '<p><a href="/wines/' + wine._id + '/edit">Edit </a></p></div>';
 	}
 
 	loadWines();
 
 	$('#newWinelink').click(function(e) {
-		console.log('clicked!')
 
     e.preventDefault();
 
@@ -44,6 +42,7 @@ $(function() {
 
       var varietal = $('#varietal').val();
       var vintage = $('#vintage').val();
+      var winery = $('#winery').val();
 
       var data = {wine: {varietal: varietal, vintage: vintage, winery: winery}};
 
