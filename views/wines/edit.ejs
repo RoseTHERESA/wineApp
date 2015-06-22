@@ -1,0 +1,27 @@
+<% include ../partials/header %>
+
+<h1>Edit!</h1>
+    <p>
+
+      <form action="/wines/<%= wine._id%>?_method=put" method="POST">
+      <div>
+         <label for="varietal">Varietal:</label>
+         <input autofocus type="text" name="varietal" id="varietal" value = <%= wine.varietal%>>
+       </div>
+       <div>
+          <label for="vintage">Vintage:</label>
+          <input autofocus type="number" name="vintage" id="vintage" value = <%= wine.vintage%>>
+        </div>
+        <div>
+          <label for="winery">Winery:</label>
+          <input autofocus type="text" name="winery" id="winery" value = <%= wine.winery%>>
+        </div>
+       <div>
+         <input type="submit" value="Update">
+       </div>
+      </form>
+    </p>
+
+
+
+<% include ../partials/footer %>
