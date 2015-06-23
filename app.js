@@ -19,7 +19,11 @@ app.get('/', function(req,res){
 	res.render("layout");
 });
 
+/**************** Search Music *******************/
 
+app.get("/searchMusic", function(req,res){
+	res.render("searchMusic");
+});
 
 /***************** Search Wines ********************/
 
