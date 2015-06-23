@@ -3,16 +3,26 @@
 	list-style-type: none;
 }
 
+.container {
+	display: table;
+	width: 100%;
+}
+
 .searchInfo {
-	float: left;
-/*	right: 600px;*/
+	/*right: 600px;*/
 	padding: 20px;
-	position: relative;
+/*	position: relative;*/
 	text-align: center;
+/*	display: table-row;*/
+	float: left;
+}
+
+.column{
+	/*display: table-cell;*/
 }
 
 .labelImage{
-	margin-top: 30px;
+/*	margin-top: 30px;*/
 }
 
 .fancyOne {

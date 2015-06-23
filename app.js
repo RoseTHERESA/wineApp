@@ -19,19 +19,35 @@ app.get('/', function(req,res){
 	res.render("layout");
 });
 
+
+
 /***************** Search Wines ********************/
+
 app.get("/searchWines", function(req, res){
-	request.get("http://services.wine.com/api/beta2/service.svc/json/catalog?search=duckhorn+2012&size=50&apikey=a16ee38c0befcddba3b69ff693aa5ece",
+	var url = encodeURI("http://services.wine.com/api/beta2/service.svc/json/catalog?search="+req.query.winery+"+"+req.query.vintage+"&size=50&apikey=a16ee38c0befcddba3b69ff693aa5ece")
+	// console.log(url);
+	if(req.query.winery) {;
+	request.get(url,
 		function(error, response, body){
 			if(error){
 				console.log(error)
 			} else{
 				var wineData = JSON.parse(body).Products.List;
-				console.log(wineData[0].Labels[0].Url);
-				res.render("searchWines", {wineData:wineData});
+				if(wineData[0] == undefined){
+					console.log(wineData, "Looking at This")
+					res.render("searchWines", {wineData: "no results"})
+				} else {
+				  res.render("searchWines", {wineData:wineData});
+				}
 			}
-		})
+	})
+    } else {
+     res.render("searchWines", {wineData: "Please Search"})
+    }
 })
+
+
+
 
 
 //Index - Go to the index page and see all of the wines
