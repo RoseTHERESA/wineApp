@@ -1,0 +1,24 @@
+
+.searchResults{
+	list-style-type: none;
+}
+
+.searchInfo {
+	float: left;
+/*	right: 600px;*/
+	padding: 20px;
+	position: relative;
+	text-align: center;
+}
+
+.labelImage{
+	margin-top: 30px;
+}
+
+.fancyOne {
+	padding-top: 10px;
+}
+
+.fancyTwo, .fancyThree, .fancyFour {
+	padding-top: 5px;
+}
