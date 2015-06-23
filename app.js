@@ -3,7 +3,8 @@ var express = require("express"),
 	bodyParser = require("body-parser"),
 	methodOverride = require("method-override"),
 	db = require("./models"),
-	morgan = require("morgan");
+	morgan = require("morgan"),
+	request = require("request");
 
 app.set("view engine", "ejs");
 app.use(methodOverride('_method'));
@@ -17,6 +18,21 @@ app.use(morgan('tiny'));
 app.get('/', function(req,res){
 	res.render("layout");
 });
+
+/***************** Search Wines ********************/
+app.get("/searchWines", function(req, res){
+	request.get("http://services.wine.com/api/beta2/service.svc/json/catalog?search=duckhorn+2012&size=50&apikey=a16ee38c0befcddba3b69ff693aa5ece",
+		function(error, response, body){
+			if(error){
+				console.log(error)
+			} else{
+				var wineData = JSON.parse(body).Products.List;
+				console.log(wineData[0].Labels[0].Url);
+				res.render("searchWines", {wineData:wineData});
+			}
+		})
+})
+
 
 //Index - Go to the index page and see all of the wines
 	//Should this populate all the previous wines? Or should it be blank everytime and have a separate page for what the user already had?
@@ -37,8 +53,8 @@ app.get("/wines", function(req,res){
         res.status(406).send('Not Acceptable');
       }
       });
-      //res.send({puppies: puppies}); //changed this to res.send, now it just returns the json of the page
-    }); //its saying send that object as the data
+      
+    }); 
 });
 
 
@@ -58,7 +74,7 @@ app.get("/wines/new", function(req,res){
 	//After creating, it should only view the wines in this session
 app.post("/wines", function(req,res){
 	var wine = new db.Wine(req.body.wine);
-	wine.ownerId = req.session.id
+	//wine.ownerId = req.session.id
 	wine.save(function(err,wine){
 		res.format({
 			'text/html': function(){
@@ -116,7 +132,7 @@ app.put("/wines/:id", function(req,res){
 			if(err){
 				res.render("wines/edit");
 			} else{
-				res.redirect("/wines");
+				res.redirect("/");
 			}
 	});
 });
@@ -131,7 +147,7 @@ app.delete("/wines/:id", function(req,res){
 				res.render("wines/show");
 			} else{
 				wine.remove();
-				res.redirect("/wines");
+				res.redirect("/");
 			}
 	});
 });

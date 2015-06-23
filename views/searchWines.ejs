@@ -1,0 +1,38 @@
+<% include partials/header %>
+<h2>Search For Wines!</h2>
+<a id="newWinelink" href="wines/new">Search For Wines!</a>
+<br>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Varietal</th>
+      <th>Winery</th>
+      <th>Label</th>
+      <th>Rating</th>
+      <th>Add</th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+
+    <% wineData.forEach(function(wine){ %>
+      <tr>
+      <td><a href="/wines/<%= wine.id%>"><%= wine.Name%></a></td>
+      <% if(wine.Varietal){ %>
+      <td><%= wine.Varietal.Name %></td>
+      <% }%>
+      <% if(wine.Vineyard){ %>
+      	<td><%= wine.Vineyard.Name %></td>
+      <% }%>
+	  <% if(wine.Labels){ %>	
+      <td><img src=<%= wine.Labels[0].Url%>></td>
+      <td><%= wine.Ratings.HighestScore%></td>
+      <% }%>
+      <td><a href="/wines/<%= wine.id%>/edit">Edit</a></td>
+    </tr>
+    <% })%>
+  </tbody>
+</table>
+<% include partials/footer %>

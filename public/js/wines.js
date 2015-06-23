@@ -35,7 +35,7 @@ $(function() {
                '<br><input type="submit" value="Add" class="btn btn-lg btn-success">' +
                '</form>';
 
-    $('body h1').after(html);
+    $('body h2').after(html);
 
     $('#newwineform').submit(function(e) {
       e.preventDefault();

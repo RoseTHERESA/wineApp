@@ -2,6 +2,7 @@ var mongoose = require("mongoose");
 var Wine = require("./wine");
 
 var wineSchema = new mongoose.Schema({
+	name: String,
 	varietal: {
 		type: String,
 		required: true
