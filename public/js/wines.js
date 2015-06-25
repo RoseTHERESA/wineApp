@@ -89,11 +89,11 @@ $(function() {
     $('#newWineform').submit(function(e) {
       e.preventDefault();
 
+
       var varietal = $('#varietal').val();
       var vintage = $('#vintage').val();
       var winery = $('#winery').val()
-      console.log(winery);
-      console.log(varietal);
+     
       
 
         $.ajax({
@@ -106,14 +106,44 @@ $(function() {
             },
           dataType: 'json',
           success: function(data){
-            $("#newWineSearch").remove()
-            console.log(data);
+           
+           data.wineData.forEach(function(wine){
+            if(wine.Labels){
+            var searchResults =  '<div class="searchInfo" "container">' + 
+      
+                                  '<li class="column"><img class="labelImage" "column" src='+ wine.Labels[0].Url +'></li>' +
+                                  '<li class="fancyOne" "column"><a href="/wines/"'+ wine.id + '">"' + wine.Name +'</a></li>' +
+                                     // if(wine.Vineyard){ 
+                                  '<li class="fancyTwo" "column"><b>Vineyard:</b> '+ wine.Vineyard.Name +'</li>' +
+                                     // }
+                                     // if(wine.Varietal){ 
+                                  '<li class="fancyThree" "column"><b>Varietal:</b>'+ wine.Varietal.Name +'</li>' +
+                                     // }
+                                  '<li class="fancyFour" "column"><b>Rating:</b>'+ wine.Ratings.HighestScore +'</li>' 
+                                     
+
+
+              $('.wineData').after(searchResults)
+            console.log(searchResults);
+            }
+           });
+          
+
+
+           console.log(data.wineData[0]);
+           console.log(data.wineData[0].Name);
+           console.log(data.wineData[0].Vineyard.Name)
+           console.log(data.wineData[0].Varietal.Name)
+           console.log(data.wineData[0].Ratings.HighestScore)
+           
           },
           error: function(err){
             alert("Not Working!")
             console.log(err)
           }
+
         });
+        $("#newWineform").remove()
       
     });
   });
