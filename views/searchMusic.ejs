@@ -15,30 +15,8 @@
 </head>
 <body>
 	<h1>Cool Beats!</h1>
-	<a href="#" class="connect"> Connect With SoundCloud</a>
-		<p>Hello, your name is <span id="username"></span></p>
-	<a href="#" id="start">Start</a>
-	<a href="#" id="stop">Stop</a>
-
-	 <form action="/searchMusic" method="GET">
-	    <div class="form-group">
-	      <label for="title">Title:</label>
-	      <input type="text" name="title" id="title" class="form-control" autofocus>
-	    </div>
-	    <div class="form-group">
-	      <label for="artist">Artist:</label>
-	      <input type="number" name="artist" id="artist" class="form-control" required>
-	    </div>
-	    <div class="Winery">
-	      <label for="genre">Genre:</label>
-	      <input type="text" name="genre" id="genre" class="form-control" required>
-	    </div>
-	      <input type="submit" value="Add" class ="btn btn-success btn-lg">
-	    </div>
-  </form>
 	<br>
-	<div id='musiclength' > <%= randomSong %> </div>
-	<iframe class="player"id="sc-widget" src="https://w.soundcloud.com/player/?url=<%= randomSong%>&auto_play=true" width="30%" height="125" scrolling="no" frameborder="no"></iframe>
+	<iframe class="player" id="sc-widget" src="https://w.soundcloud.com/player/?url=<%= randomSong%>&auto_play=true" width="30%" height="125" scrolling="no" frameborder="no"></iframe>
 
 
 <script src="js/soundcloud.js"></script>

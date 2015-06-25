@@ -17,9 +17,28 @@ app.use(morgan('tiny'));
 /****************** Wine Routes *******************/
 
 //Root Directory
-app.get('/', function(req,res){
-	res.render("layout");
-});
+app.get("/", function(req, res){
+	var url = encodeURI("http://services.wine.com/api/beta2/service.svc/json/catalog?search="+req.query.winery+"+"+req.query.vintage+"&size=50&apikey=a16ee38c0befcddba3b69ff693aa5ece")
+	// console.log(url);
+	if(req.query.winery) {;
+	request.get(url,
+		function(error, response, body){
+			if(error){
+				console.log(error)
+			} else{
+				var wineData = JSON.parse(body).Products.List;
+				if(wineData[0] == undefined){
+					console.log(wineData, "Looking at This")
+					res.render("layout", {wineData: "no results"})
+				} else {
+				  res.render("layout", {wineData:wineData});
+				}
+			}
+	})
+    } else {
+     res.render("layout", {wineData: "Please Search"})
+    }
+})
 
 /**************** Search Music *******************/
 
@@ -58,6 +77,8 @@ app.get("/searchMusic", function(req,res){
 
 /***************** Search Wines ********************/
 
+//Before Single Page Awesomeness...
+
 app.get("/searchWines", function(req, res){
 	var url = encodeURI("http://services.wine.com/api/beta2/service.svc/json/catalog?search="+req.query.winery+"+"+req.query.vintage+"&size=50&apikey=a16ee38c0befcddba3b69ff693aa5ece")
 	// console.log(url);
@@ -72,7 +93,20 @@ app.get("/searchWines", function(req, res){
 					console.log(wineData, "Looking at This")
 					res.render("searchWines", {wineData: "no results"})
 				} else {
-				  res.render("searchWines", {wineData:wineData});
+					res.format({
+					  'text/html': function(){
+				  		res.render("searchWines", {wineData:wineData});	
+	        	},
+	        	'application/json': function(){
+				  		res.send({wineData:wineData});
+	      		},
+	      		'default': function() {
+	        		// log the request and respond with 406
+	        		res.status(406).send('Not Acceptable');
+	    			}
+	    		});
+
+
 				}
 			}
 	})
@@ -124,6 +158,8 @@ app.get("/wines/new", function(req,res){
 	//This should also be a single page app!! 
 	//After creating, it should only view the wines in this session
 app.post("/wines", function(req,res){
+	console.log("WE GOT HERE!")
+	console.log(req.body.wine)
 	var wine = new db.Wine(req.body.wine);
 	//wine.ownerId = req.session.id
 	wine.save(function(err,wine){

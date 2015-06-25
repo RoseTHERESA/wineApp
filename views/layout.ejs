@@ -1,39 +1,11 @@
 <% include partials/headerSinglePageApp %>
 <h2>Find Beats for Your Wines!</h2>
-<a id="newWineSearch" href="/searchWines">Search For Wines!</a>
+<a id="newWineSearch" href="">Search For Wines!</a>
 <br>
 <a id="newWinelink" href="wines/new">Add your Own Wine!</a>
 
-<br>
-  <% if(typeof wineData !== 'string' ) { %>
-     <% wineData.forEach(function(wine){ %>
-      <ul class="searchResults">
-      <% if(wine.Labels){ %>	
 
-	<div class="searchInfo" "container">
-    	
-    	<li class="column"><img class="labelImage" 
-    	"column" src=<%= wine.Labels[0].Url%>></li>
-      	<li class="fancyOne" "column"><a href="/wines/<%= wine.id%>"><%= wine.Name%></a></li>
-      		<% if(wine.Vineyard){ %>
-      	<li class="fancyTwo" "column"><b>Vineyard:</b> <%= wine.Vineyard.Name %></li>
-      		<% }%>
-     	 <% if(wine.Varietal){ %>
-      	<li class="fancyThree" "column"><b>Varietal:</b> <%= wine.Varietal.Name %></li>
-      		<% }%>
-      <li class="fancyFour" "column"><b>Rating:</b> <%= wine.Ratings.HighestScore%></li>
-      		<% }%>
- 
-      <li><a href="/wines/<%= wine.id%>/edit">Edit</a></li>
-      <!-- Add a add button to put a certain wine into the database -->
-		
-	</div>
-	
-    </ul>
-    <% })%>
-  <% } else { %>
-	<%= wineData  %>
-  <% }  %>
+
 
 <!-- Here is Where the Search Data is Populated, Make Sure Music Player is above -->
 
