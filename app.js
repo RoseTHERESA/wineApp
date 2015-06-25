@@ -6,6 +6,8 @@ var express = require("express"),
 	morgan = require("morgan"),
 	request = require("request");
 
+var dotenv = require("dotenv").load();		
+
 app.set("view engine", "ejs");
 app.use(methodOverride('_method'));
 app.use(express.static(__dirname + '/public'));
@@ -22,8 +24,37 @@ app.get('/', function(req,res){
 /**************** Search Music *******************/
 
 app.get("/searchMusic", function(req,res){
-	res.render("searchMusic");
+	var url = "http://api.soundcloud.com/tracks.json?client_id="+ process.env.SOUNDCLOUD_SECRET +"&q=jazz+electronic&limit=50"
+	request.get(url,
+		function(error, response, body){
+			if(error){
+				console.log(error)
+			} else{
+				var musicData = JSON.parse(body)
+				var musicArray = []
+				musicData.forEach(function(music){
+					musicArray.push(music.uri);
+				});
+				var randomNumber = Math.floor(Math.random() * musicData.length)
+				var randomTrack = musicArray[randomNumber]
+
+			res.format({ //more complex, so it sees what request is coming in and gives it back
+	      'text/html': function(){
+	        res.render("searchMusic", {randomSong:musicArray[randomNumber]});	
+	        },
+
+	      'application/json': function(){
+	        res.send(JSON.stringify(randomTrack));
+	      },
+	      'default': function() {
+	        // log the request and respond with 406
+	        res.status(406).send('Not Acceptable');
+	    	}
+		});	
+	};
+	});	
 });
+
 
 /***************** Search Wines ********************/
 
