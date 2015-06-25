@@ -35,7 +35,6 @@
     //   });
       widget.bind(SC.Widget.Events.FINISH, function(){
 
-      	alert("ALL DONE!")
         getData();
 
       });

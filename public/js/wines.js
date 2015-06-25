@@ -10,8 +10,8 @@ $(function() {
 	}
 
 	function wineHtml(wine) {
-		return '<br><div data-id="' + wine._id + '"><p><a href="/wines/' + wine._id + '/">' + wine.varietal + 
-           '</a></p><p>' + wine.vintage + '</p><p>' + wine.winery + '</p>'
+		return '<br><div data-id="' + wine._id + '"><p><b>Winery:</b> <a href="/wines/' + wine._id + '/">' + wine.winery + 
+           '</a></p><p><b>Varietal:</b> ' + wine.varietal + '</p><p><b>Vintage:</b> ' + wine.vintage + '</p>'
            '<p><a href="/wines/' + wine._id + '/edit">Edit </a></p></div>';
 	}
 
