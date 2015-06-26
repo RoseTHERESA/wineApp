@@ -4,6 +4,7 @@ var Wine = require("./wine");
 var wineSchema = new mongoose.Schema({
 	name: String,
 	varietal: {
+		//put dropdown menu 
 		type: String,
 		required: true
 	},

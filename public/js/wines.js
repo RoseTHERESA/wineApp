@@ -1,5 +1,5 @@
 $(function() {
-	
+	 var widget;
 /********************** Add Wines to the DB, Single Page App ************************/
   function loadWines(){
 		$.getJSON("/wines").done(function(data){
@@ -110,31 +110,37 @@ $(function() {
            data.wineData.forEach(function(wine){
             if(wine.Labels){
             var searchResults =  '<div class="searchInfo" "container">' + 
+                                  '<ul class="searchResults">' +
       
                                   '<li class="column"><img class="labelImage" "column" src='+ wine.Labels[0].Url +'></li>' +
-                                  '<li class="fancyOne" "column"><a href="/wines/"'+ wine.id + '">"' + wine.Name +'</a></li>' +
+                                  '<li class="fancyOne" "column"><a href="/wines/"'+ wine.id + '">' + wine.Name +'</a></li>' +
                                      // if(wine.Vineyard){ 
-                                  '<li class="fancyTwo" "column"><b>Vineyard:</b> '+ wine.Vineyard.Name +'</li>' +
+                                  '<li class="fancyTwo" "column"><b>Vineyard: </b>'+ wine.Vineyard.Name +'</li>' +
                                      // }
                                      // if(wine.Varietal){ 
-                                  '<li class="fancyThree" "column"><b>Varietal:</b>'+ wine.Varietal.Name +'</li>' +
+                                  '<li class="fancyThree" "column"><b>Varietal: </b>'+ wine.Varietal.Name +'</li>' +
                                      // }
-                                  '<li class="fancyFour" "column"><b>Rating:</b>'+ wine.Ratings.HighestScore +'</li>' 
+                                  '<li class="fancyFour" "column"><b>Rating: </b>'+ wine.Ratings.HighestScore +'</li>' +
+                                  '<li>' +
+                                   '<input type="submit" value="Add" class="btn btn-success btn-lg" id="playButton">'
+                                 '<li>' +  
+                                  '</ul>'
                                      
 
-
+                         
               $('.wineData').after(searchResults)
-            console.log(searchResults);
+              // playmusic();
+            //console.log(searchResults);
             }
            });
           
 
 
-           console.log(data.wineData[0]);
-           console.log(data.wineData[0].Name);
-           console.log(data.wineData[0].Vineyard.Name)
-           console.log(data.wineData[0].Varietal.Name)
-           console.log(data.wineData[0].Ratings.HighestScore)
+           // console.log(data.wineData[0]);
+           // console.log(data.wineData[0].Name);
+           // console.log(data.wineData[0].Vineyard.Name)
+           // console.log(data.wineData[0].Varietal.Name)
+           // console.log(data.wineData[0].Ratings.HighestScore)
            
           },
           error: function(err){
@@ -147,6 +153,97 @@ $(function() {
       
     });
   });
+      // Right now #playButton does not exist on the page
+      // so let's make the body responsible for listening to that
+      // we use event delegation to make sure that when dynamically added elements
+      // are clicked on, we can still listen for them!
+        $('body').on("click", "#playButton", function(e){ 
+          getData();
+        });
+
+}); // CLOSE DOCUMENT.READY
+
+      function getData(){
+        $.ajax({
+          method: "GET",
+          url: "/searchMusic",
+          dataType: 'json',
+          success: function(data){
+            $("#sc-widget").remove()
+            var $iframe = '<iframe class="player" id="sc-widget" src=https://w.soundcloud.com/player/?url=' + data + '&auto_play=true" width="30%" height="125" scrolling="no" frameborder="no"></iframe>'
+            $("body").append($iframe)
+            widget = SC.Widget(document.getElementById('sc-widget'))
+            widget.bind(SC.Widget.Events.FINISH, getData)
+            widget.play()
+            widget.setVolume(50);
+          },
+          error: function(err){
+            alert("SOMETHING WENT WRONG!")
+            console.log(err)
+          }
+        });
+      }
+
+      
 
 
-});
+// }
+
+
+
+
+
+
+      //     function play(){
+      //     var widget;
+      //     console.log("MEOW PLAYS!")
+
+      //       function getData(){
+      //         console.log("MEOW GET DATA")
+      //         $.ajax({
+      //           method: "GET",
+      //           url: "/searchMusic",
+      //           dataType: 'json',
+      //           success: function(data){
+                  
+      //             $("#sc-widget").remove()
+      //               var $iframe = '<iframe class="player" id="sc-widget" src=https://w.soundcloud.com/player/?url=' + data + '&auto_play=true" width="30%" height="125" scrolling="no" frameborder="no"></iframe>'
+                  
+      //             $("body").append($iframe)
+      //                 console.log("I frame is working...")
+                      
+      //                 widget = SC.Widget(document.getElementById('sc-widget'))
+      //                 widget.bind(SC.Widget.Events.FINISH, getData)
+                      
+      //                 widget.play()
+                      
+      //                 widget.setVolume(50);
+      //                   var widgetIframe = document.getElementById('sc-widget');
+                      
+      //                 widget= SC.Widget(widgetIframe);
+      //                 widget.bind(SC.Widget.Events.FINISH, function(){
+      
+      //                     getData();
+      //                 });
+              
+      //               },
+      //                 error: function(err){
+      //                   alert("SOMETHING WENT WRONG!")
+      //                   console.log(err)
+      //               }
+      //               });
+      //               }
+
+    
+      //             }
+      //             play();
+      //     //e.preventDefault();
+      //     //Find code to only enable the user to click once - google unregister an event attached to a button         
+
+
+          
+        
+      //   });
+      //   getData();
+      // }
+

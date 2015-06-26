@@ -23,6 +23,7 @@ app.get("/", function(req, res){
 	if(req.query.winery) {;
 	request.get(url,
 		function(error, response, body){
+			console.log(body);
 			if(error){
 				console.log(error)
 			} else{
@@ -31,12 +32,13 @@ app.get("/", function(req, res){
 					console.log(wineData, "Looking at This")
 					res.render("layout", {wineData: "no results"})
 				} else {
-				  res.render("layout", {wineData:wineData});
+				  res.render("layout", {wineData:wineData, randomSong:musicArray[randomNumber]});
 				}
 			}
 	})
     } else {
-     res.render("layout", {wineData: "Please Search"})
+    	console.log("**************")
+     res.render("layout", {wineData: "Please Search", randomSong:"musicArray[randomNumber]"})
     }
 })
 
