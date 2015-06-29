@@ -38,7 +38,7 @@ app.get("/", function(req, res){
 	})
     } else {
     	console.log("**************")
-     res.render("layout", {wineData: "Please Search", randomSong:"musicArray[randomNumber]"})
+     res.render("layout", {wineData: "Please Search", randomSong:"musicArray[randomNumber]"	})
     }
 })
 
@@ -165,11 +165,13 @@ app.post("/wines", function(req,res){
 	var wine = new db.Wine(req.body.wine);
 	//wine.ownerId = req.session.id
 	wine.save(function(err,wine){
+		console.log("ANY ERRORS?", err)
 		res.format({
 			'text/html': function(){
 				res.redirect("/wines");
 			},
 			'application/json': function(){
+				console.log("THIS IS WINE", wine)
 				res.send(wine);
 			},
 			'default': function(){

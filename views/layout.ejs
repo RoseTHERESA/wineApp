@@ -6,10 +6,23 @@
 
 <script src="js/soundcloud.js"></script>
 <br>
+Choose your favorite music genre:
+	<form action="">
+		<div>
+			<select>
+			  <option value="Classical">Classical</option>
+			  <option value="Jazz">Jazz</option>
+			  <option value="Electronic">Electronic</option>
+			  <option value="Country">Country</option>
+			</select>
+			<input type="submit" value="Submit">
+		</div>	
+	</form>
 <br>
 <a id="newWineSearch" href="">Search For Wines!</a>
 <br>
 <a id="newWinelink" href="wines/new">Add your Own Wine!</a>
+<div id="musicPlayer"></div>
 
 
 
@@ -17,6 +30,6 @@
 <!-- Here is Where the Search Data is Populated, Make Sure Music Player is above -->
 
 
-<div class="wineData"></div>
+<div id="wineData"></div>
 
 <% include partials/footer %>

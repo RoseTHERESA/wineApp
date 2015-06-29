@@ -12,9 +12,10 @@ $(function() {
 	}
 
 	function wineHtml(wine) {
-		return '<br><div data-id="' + wine._id + '"><p><b>Winery:</b> <a href="/wines/' + wine._id + '/">' + wine.winery + 
-           '</a></p><p><b>Varietal:</b> ' + wine.varietal + '</p><p><b>Vintage:</b> ' + wine.vintage + '</p>'
-           '<p><a href="/wines/' + wine._id + '/edit">Edit </a></p></div>';
+		return '<br><div data-id="' + wine._id + '"><p><img src='+wine.image+'></p><a href="/wines/' + wine._id + '/">' + wine.winery + 
+           '</a></p><p><b>Wine Name:</b> ' + wine.name + '</p><p><b>Varietal:</b> ' + wine.varietal + '</p>'
+           '<p><a href="/wines/' + wine._id + '/edit">Edit </a></p></div>' +'<br><input type="submit" value="Add" id="play" class="btn btn-lg btn-success">' 
+               '</form>'
 	}
 
 	loadWines();
@@ -26,8 +27,62 @@ $(function() {
     var html = '<br><form id="newwineform" action="#" method="POST">' +
                '<div class="form-group">' + 
                 //put on two lines, one for label and one for input
-               '<label for="varietal">Varietal: </label><input type="text" class="form-control" name="varietal" id="varietal" autofocus>' +
-               '</div>' +
+               '<label for="varietal">Varietal: </label><select type="text" class="form-control" name="varietal" id="varietal" autofocus>' +
+                  '<option value="Albariño">Albariño</option>' +
+                  '<option value="Barbaresco">Barbaresco</option>' +
+                  '<option value="Bardolino">Bardolino</option>' +
+                  '<option value="Barolo">Barolo</option>' +
+                  '<option value="Blanc de Blancs">Blanc de Blancs</option>' +
+                  '<option value="Blanc de Noirs">Blanc de Noirs</option>' +
+                  '<option value="Brunello">Brunello</option>' +
+                  '<option value="Cabernet Franc">Cabernet Franc</option>' +
+                  '<option value="Cabernet Sauvignon">Cabernet Sauvignon</option>' +
+                  '<option value="Carignan">Carignan</option>' +
+                  '<option value="Carmenere">Carmenere</option>' +
+                  '<option value="Cava">Cava</option>' +
+                  '<option value="Champagne">Champagne</option>' +
+                  '<option value="Chardonnay">Chardonnay</option>' +
+                  '<option value="Châteauneuf-du-Pape">Châteauneuf-du-Pape</option>' +
+                  '<option value="Chenin Blanc">Chenin Blanc</option>' +
+                  '<option value="Chianti">Chianti</option>' +
+                  '<option value="Chianti Classico">Chianti Classico</option>' +
+                  '<option value="Claret">Claret</option>' +
+                  '<option value="Constantia">Constantia</option>' +
+                  '<option value="Cortese">Cortese</option>' +
+                  '<option value="Dolcetto">Dolcetto</option>' +
+                  '<option value="Fumé Blanc">Fumé Blanc</option>' +
+                  '<option value="Gewürztraminer">Gewürztraminer</option>' +
+                  '<option value="Grappa">Grappa</option>' +
+                  '<option value="Grenache">Grenache</option>' +
+                  '<option value="Riesling">Riesling</option>' +
+                  '<option value="Lambrusco">Lambrusco</option>' +
+                  '<option value="Madeira">Madeira</option>' +
+                  '<option value="Malbec">Malbec</option>' +
+                  '<option value="Marsala">Marsala</option>' +
+                  '<option value="Marsanne">Marsanne</option>' +
+                  '<option value="Mead">Mead</option>' +
+                  '<option value="Meritage">Meritage</option>' +
+                  '<option value="Merlot">Merlot</option>' +
+                  '<option value="Moscato">Moscato</option>' +
+                  '<option value="Mourvedre">Mourvedre</option>' +
+                  '<option value="Muscat">Muscat</option>' +
+                  '<option value="Petit Verdot">Petit Verdot</option>' +
+                  '<option value="Petite Sirah">Petite Sirah</option>' +
+                  '<option value="Pinot Blanc">Pinot Blanc</option>' +
+                  '<option value="Pinot Grigio">Pinot Grigio</option>' +
+                  '<option value="Pinot Meunier">Pinot Meunier</option>' +
+                  '<option value="Pinot Noir">Pinot Noir</option>' +
+                  '<option value="Pinotage">Pinotage</option>' +
+                  '<option value="Port">Port</option>' +
+                  '<option value="Rosé">Rosé</option>' +
+                  '<option value="Roussanne">Roussanne</option>' +
+                  '<option value="Sangiovese">Sangiovese</option>' +
+                  '<option value="Sauvignon Blanc">Sauvignon Blanc</option>' +
+                  '<option value="Trebbiano">Trebbiano</option>' +
+                  '<option value="Verdicchio">Verdicchio</option>' +
+                  '<option value="Viognier">Viognier</option>' +
+                  '<option value="Zinfandel">Zinfandel</option>' +
+               '</select></div>' +
                '<div class="form-group">' +
                '<label for="vintage">Vintage: </label>' +
                '<input type="number" class="form-control" name="vintage" id="vintage" autofocus>' +
@@ -84,7 +139,7 @@ $(function() {
                '<br><input type="submit" value="Add" class="btn btn-lg btn-success">' +
                '</form>';
 
-    $('h2').after(html);
+    $('#newWinelink').after(html);
 
     $('#newWineform').submit(function(e) {
       e.preventDefault();
@@ -109,7 +164,7 @@ $(function() {
            
            data.wineData.forEach(function(wine){
             if(wine.Labels){
-            var searchResults =  '<div class="searchInfo" "container">' + 
+            var searchResults =  '<div class="searchInfo" "container" id="wineSearchResults">' + 
                                   '<ul class="searchResults">' +
       
                                   '<li class="column"><img class="labelImage" "column" src='+ wine.Labels[0].Url +'></li>' +
@@ -118,29 +173,51 @@ $(function() {
                                   '<li class="fancyTwo" "column"><b>Vineyard: </b>'+ wine.Vineyard.Name +'</li>' +
                                      // }
                                      // if(wine.Varietal){ 
-                                  '<li class="fancyThree" "column"><b>Varietal: </b>'+ wine.Varietal.Name +'</li>' +
+                                  '<li class="fancyThree" "column" id="searchVarietal"><b>Varietal: </b>'+ wine.Varietal.Name +'</li>' +
                                      // }
                                   '<li class="fancyFour" "column"><b>Rating: </b>'+ wine.Ratings.HighestScore +'</li>' +
                                   '<li>' +
                                    '<input type="submit" value="Add" class="btn btn-success btn-lg" id="playButton">'
                                  '<li>' +  
-                                  '</ul>'
+                                  '</ul>' +
+                                  '</div>'
                                      
 
                          
-              $('.wineData').after(searchResults)
-              // playmusic();
-            //console.log(searchResults);
+              $('#wineData').after(searchResults)
+              $("#playButton").on("click", function(e){  
+
+                  
+                  var image = wine.Labels[0].Url
+                  var name = wine.Name
+                  var varietal = wine.Varietal.Name;
+                  var vineyard = wine.Vineyard.Name;
+                  // console.log(image);
+                  // console.log(varietal);
+                  // console.log(vineyard);
+                    
+                  var data = {wine: {varietal: varietal, name: name, vineyard: vineyard, image: image}};
+                    console.log(data);
+                        
+                        $.ajax({ 
+                          type: 'POST',
+                          url: '/wines',
+                          data: data,
+                          dataType: 'json'
+                        }).done(function(data) {
+                          var myhtml = wineHtml(data);
+                          $('body').append(myhtml);
+                          console.log("ITS POSTING!!");
+                        });
+                        //loadWines();
+
+                });
+               
             }
-           });
+           });q
           
 
 
-           // console.log(data.wineData[0]);
-           // console.log(data.wineData[0].Name);
-           // console.log(data.wineData[0].Vineyard.Name)
-           // console.log(data.wineData[0].Varietal.Name)
-           // console.log(data.wineData[0].Ratings.HighestScore)
            
           },
           error: function(err){
@@ -159,6 +236,10 @@ $(function() {
       // are clicked on, we can still listen for them!
         $('body').on("click", "#playButton", function(e){ 
           getData();
+           
+           // var varietal = $('#searchVarietal').val();
+           // console.log(varietal);
+           
         });
 
 }); // CLOSE DOCUMENT.READY
@@ -176,74 +257,17 @@ $(function() {
             widget.bind(SC.Widget.Events.FINISH, getData)
             widget.play()
             widget.setVolume(50);
+          $('.searchInfo').remove();
           },
           error: function(err){
             alert("SOMETHING WENT WRONG!")
             console.log(err)
           }
         });
+        
       }
 
+
       
 
-
-// }
-
-
-
-
-
-
-      //     function play(){
-      //     var widget;
-      //     console.log("MEOW PLAYS!")
-
-      //       function getData(){
-      //         console.log("MEOW GET DATA")
-      //         $.ajax({
-      //           method: "GET",
-      //           url: "/searchMusic",
-      //           dataType: 'json',
-      //           success: function(data){
-                  
-      //             $("#sc-widget").remove()
-      //               var $iframe = '<iframe class="player" id="sc-widget" src=https://w.soundcloud.com/player/?url=' + data + '&auto_play=true" width="30%" height="125" scrolling="no" frameborder="no"></iframe>'
-                  
-      //             $("body").append($iframe)
-      //                 console.log("I frame is working...")
-                      
-      //                 widget = SC.Widget(document.getElementById('sc-widget'))
-      //                 widget.bind(SC.Widget.Events.FINISH, getData)
-                      
-      //                 widget.play()
-                      
-      //                 widget.setVolume(50);
-      //                   var widgetIframe = document.getElementById('sc-widget');
-                      
-      //                 widget= SC.Widget(widgetIframe);
-      //                 widget.bind(SC.Widget.Events.FINISH, function(){
-      
-      //                     getData();
-      //                 });
-              
-      //               },
-      //                 error: function(err){
-      //                   alert("SOMETHING WENT WRONG!")
-      //                   console.log(err)
-      //               }
-      //               });
-      //               }
-
-    
-      //             }
-      //             play();
-      //     //e.preventDefault();
-      //     //Find code to only enable the user to click once - google unregister an event attached to a button         
-
-
-          
-        
-      //   });
-      //   getData();
-      // }
 
