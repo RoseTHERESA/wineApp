@@ -14,10 +14,8 @@ var wineSchema = new mongoose.Schema({
 	winery: String,
 	vineyard: String,
 	image: String,
-	music: { 
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "Music"
-	}
+	rating: Number,
+
 });
 
 var Wine = mongoose.model("Wine", wineSchema);

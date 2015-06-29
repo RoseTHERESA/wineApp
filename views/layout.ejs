@@ -3,26 +3,31 @@
 <br>
 
 
-
 <script src="js/soundcloud.js"></script>
 <br>
 Choose your favorite music genre:
-	<form action="">
+	<form id="musicGenre">
 		<div>
-			<select>
+			<select id="pickedGenre">
 			  <option value="Classical">Classical</option>
 			  <option value="Jazz">Jazz</option>
 			  <option value="Electronic">Electronic</option>
 			  <option value="Country">Country</option>
 			</select>
-			<input type="submit" value="Submit">
 		</div>	
 	</form>
 <br>
 <a id="newWineSearch" href="">Search For Wines!</a>
 <br>
 <a id="newWinelink" href="wines/new">Add your Own Wine!</a>
+<br>
 <div id="musicPlayer"></div>
+<br>
+<div id="playlistStuff">
+	<ul id="playlistUL">PLAYLIST:</ul>
+	<br>
+	<input type="submit" value="Play" id="playButton" class="btn btn-lg btn-success">
+</div>
 
 
 
@@ -31,5 +36,6 @@ Choose your favorite music genre:
 
 
 <div id="wineData"></div>
+
 
 <% include partials/footer %>

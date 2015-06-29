@@ -18,7 +18,7 @@ app.use(morgan('tiny'));
 
 //Root Directory
 app.get("/", function(req, res){
-	var url = encodeURI("http://services.wine.com/api/beta2/service.svc/json/catalog?search="+req.query.winery+"+"+req.query.vintage+"&size=50&apikey=a16ee38c0befcddba3b69ff693aa5ece")
+	var url = encodeURI("http://services.wine.com/api/beta2/service.svc/json/catalog?search="+req.query.winery+"+"+req.query.vintage+"+"+req.query.varietal+"&size=50&apikey=a16ee38c0befcddba3b69ff693aa5ece")
 	// console.log(url);
 	if(req.query.winery) {;
 	request.get(url,
@@ -37,7 +37,6 @@ app.get("/", function(req, res){
 			}
 	})
     } else {
-    	console.log("**************")
      res.render("layout", {wineData: "Please Search", randomSong:"musicArray[randomNumber]"	})
     }
 })
@@ -45,7 +44,11 @@ app.get("/", function(req, res){
 /**************** Search Music *******************/
 
 app.get("/searchMusic", function(req,res){
-	var url = "http://api.soundcloud.com/tracks.json?client_id="+ process.env.SOUNDCLOUD_SECRET +"&q=jazz+electronic&limit=50"
+	var varietal = req.query.varietal
+	db.Varietal.find({name: varietal}, function(error, varietals){
+		console.log(varietals);
+		var url = "http://api.soundcloud.com/tracks.json?client_id="+ process.env.SOUNDCLOUD_SECRET +"&q="+ req.query.genre +"+"+ varietals[0].notes[0] +"&limit=50"
+	console.log(url);
 	request.get(url,
 		function(error, response, body){
 			if(error){
@@ -73,7 +76,10 @@ app.get("/searchMusic", function(req,res){
 	    	}
 		});	
 	};
-	});	
+	});
+	})
+
+	
 });
 
 
@@ -84,7 +90,7 @@ app.get("/searchMusic", function(req,res){
 app.get("/searchWines", function(req, res){
 	var url = encodeURI("http://services.wine.com/api/beta2/service.svc/json/catalog?search="+req.query.winery+"+"+req.query.vintage+"&size=50&apikey=a16ee38c0befcddba3b69ff693aa5ece")
 	// console.log(url);
-	if(req.query.winery) {;
+	if(req.query.winery) {
 	request.get(url,
 		function(error, response, body){
 			if(error){
@@ -182,21 +188,6 @@ app.post("/wines", function(req,res){
 });
 
 
-
-
-
-/************** Without Single Page App *************/
-// 	db.Wine.create({varietal: req.body.varietal, vintage: req.body.vintage, winery: req.body.winery}, function(err, wine){
-// 		if(err){
-// 			console.log(err);
-// 			res.render("wines/new");
-// 		} else{
-// 			console.log(wine);
-// 			res.redirect("/wines");
-// 		}
-// 	});
-// });
-
 //Show
 	//This will be used to show all of the previous wines enjoyed with the rating system
 app.get("/wines/:id", function(req,res){
@@ -242,6 +233,7 @@ app.delete("/wines/:id", function(req,res){
 			}
 	});
 });
+
 
 
 app.get('*', function(req,res){

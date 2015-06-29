@@ -1,6 +1,10 @@
 $(function() {
 	 var widget;
+   playlistArray = [];
+   playlistWines = [];
+   playlistIndex = 0
 /********************** Add Wines to the DB, Single Page App ************************/
+
   function loadWines(){
 		$.getJSON("/wines").done(function(data){
 			data.wines.forEach(function(wine){ //wine comes from the app.js routes
@@ -12,15 +16,18 @@ $(function() {
 	}
 
 	function wineHtml(wine) {
-		return '<br><div data-id="' + wine._id + '"><p><img src='+wine.image+'></p><a href="/wines/' + wine._id + '/">' + wine.winery + 
-           '</a></p><p><b>Wine Name:</b> ' + wine.name + '</p><p><b>Varietal:</b> ' + wine.varietal + '</p>'
-           '<p><a href="/wines/' + wine._id + '/edit">Edit </a></p></div>' +'<br><input type="submit" value="Add" id="play" class="btn btn-lg btn-success">' 
-               '</form>'
+		return '<div class="allInfo"><br><div data-id="' + wine._id + '"><p><img src='+wine.image+'></p><a href="/wines/' + wine._id + '/">' + wine.name + 
+           '</a></p><p><b>Winery:</b> ' + wine.winery + '</p><p><b>Varietal:</b> ' + wine.varietal + '</p><p><b>Rating:</b> ' + wine.rating + '</p>' +
+           '<p><a href="/wines/' + wine._id + '/edit">Edit </a></p></div>' +'<br><input type="submit" value="Add to Playlist" id="playlistButton" class="btn btn-lg btn-success" data-varietal="'+ wine.varietal +'" data-name="'+ wine.name +'"></div>' 
+               
 	}
 
 	loadWines();
 
+  
+
 	$('#newWinelink').click(function(e) {
+    $("#newWineform").remove()
 
     e.preventDefault();
 
@@ -90,10 +97,10 @@ $(function() {
                '<label for="winery">Winery: </label>' +
                '<input type="text" class="form-control" name="winery" id="winery" autofocus>' +
                '</div>' +
-               '<br><input type="submit" value="Add" class="btn btn-lg btn-success">' +
+               '<br><input type="submit" value="Add to Playlist" class="btn btn-lg btn-success">' +
                '</form>';
 
-    $('body h2').after(html);
+    $('#newWinelink').after(html);
 
     $('#newwineform').submit(function(e) {
       e.preventDefault();
@@ -103,6 +110,7 @@ $(function() {
       var winery = $('#winery').val();
 
       var data = {wine: {varietal: varietal, vintage: vintage, winery: winery}};
+      data.push(playlistArray);
 
       $.ajax({
         type: 'POST',
@@ -121,6 +129,7 @@ $(function() {
  /**************************** Looking Up Wines from the Wine.com API ******************************/
 
   $('#newWineSearch').click(function(e) {
+    $("#newwineform").remove()
 
     e.preventDefault();
 
@@ -175,28 +184,28 @@ $(function() {
                                      // if(wine.Varietal){ 
                                   '<li class="fancyThree" "column" id="searchVarietal"><b>Varietal: </b>'+ wine.Varietal.Name +'</li>' +
                                      // }
-                                  '<li class="fancyFour" "column"><b>Rating: </b>'+ wine.Ratings.HighestScore +'</li>' +
-                                  '<li>' +
-                                   '<input type="submit" value="Add" class="btn btn-success btn-lg" id="playButton">'
-                                 '<li>' +  
+                                  '<li class="fancyFour" "column"><b>Rating: </b>'+ wine.Ratings.HighestScore +'</li>' + 
+                                 '<li><input type="submit" value="Add to Favorites" class="btn btn-success btn-lg" id="favoriteButton"></li>' +
                                   '</ul>' +
                                   '</div>'
                                      
 
                          
               $('#wineData').after(searchResults)
-              $("#playButton").on("click", function(e){  
+              $("#favoriteButton").on("click", function(e){  
+                $('.searchInfo').remove();
 
                   
                   var image = wine.Labels[0].Url
                   var name = wine.Name
                   var varietal = wine.Varietal.Name;
                   var vineyard = wine.Vineyard.Name;
+                  var rating = wine.Ratings.HighestScore;
                   // console.log(image);
                   // console.log(varietal);
                   // console.log(vineyard);
                     
-                  var data = {wine: {varietal: varietal, name: name, vineyard: vineyard, image: image}};
+                  var data = {wine: {varietal: varietal, name: name, winery: vineyard, image: image, rating: rating}};
                     console.log(data);
                         
                         $.ajax({ 
@@ -226,7 +235,8 @@ $(function() {
           }
 
         });
-        $("#newWineform").remove()
+        $("#newWineform").remove();
+
       
     });
   });
@@ -234,29 +244,52 @@ $(function() {
       // so let's make the body responsible for listening to that
       // we use event delegation to make sure that when dynamically added elements
       // are clicked on, we can still listen for them!
+        $('body').on("click", "#playlistButton", function(e){ 
+         console.log($(this).attr('data-varietal'));
+         console.log($(this).attr('data-name'));
+         playlistVarietal = $(this).attr('data-varietal');
+         playlistWine = $(this).attr('data-name');
+
+         playlistArray.push(playlistVarietal);
+         playlistWines.push(playlistWine); 
+
+         $('#playlistUL').append('<li>'+playlistWine+'</li>');
+         
+         // getData();
+         
+           
+        });
         $('body').on("click", "#playButton", function(e){ 
           getData();
-           
-           // var varietal = $('#searchVarietal').val();
-           // console.log(varietal);
-           
         });
 
 }); // CLOSE DOCUMENT.READY
 
+/***************************** Adding the SoundCloud Widget ********************/
       function getData(){
+        var genre = $('#pickedGenre').val();
+        var varietal = playlistArray[playlistIndex]
+        console.log(varietal);
+        console.log(playlistArray);
+        console.log(playlistIndex);
+
         $.ajax({
           method: "GET",
-          url: "/searchMusic",
+          url: "/searchMusic?genre="+genre+"&varietal="+varietal,
           dataType: 'json',
           success: function(data){
             $("#sc-widget").remove()
             var $iframe = '<iframe class="player" id="sc-widget" src=https://w.soundcloud.com/player/?url=' + data + '&auto_play=true" width="30%" height="125" scrolling="no" frameborder="no"></iframe>'
-            $("body").append($iframe)
+            $('#musicPlayer').after($iframe);
             widget = SC.Widget(document.getElementById('sc-widget'))
             widget.bind(SC.Widget.Events.FINISH, getData)
-            widget.play()
-            widget.setVolume(50);
+            if (playlistIndex < playlistArray.length -1 ) {
+              playlistIndex += 1
+            } else {
+              playlistIndex = 0
+            }
+              widget.play()
+              widget.setVolume(50);
           $('.searchInfo').remove();
           },
           error: function(err){
