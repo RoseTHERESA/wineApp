@@ -4,7 +4,10 @@ var express = require("express"),
 	methodOverride = require("method-override"),
 	db = require("./models"),
 	morgan = require("morgan"),
-	request = require("request");
+	request = require("request"),
+	session = require("cookie-session"),
+	loginMiddleware = require("./middleware/loginHelper"),
+	routeMiddleware = require("./middleware/routeHelper");
 
 var dotenv = require("dotenv").load();		
 
@@ -13,6 +16,14 @@ app.use(methodOverride('_method'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(morgan('tiny'));
+
+app.use(session({
+	maxAge: 3600000,
+	secret: "lovinthatwine",
+	name: "vinobeatchip"
+}));
+
+app.use(loginMiddleware);
 
 /****************** Wine Routes *******************/
 

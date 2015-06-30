@@ -252,6 +252,7 @@ $(function() {
 
          playlistArray.push(playlistVarietal);
          playlistWines.push(playlistWine); 
+         console.log(playlistVarietal);
 
          $('#playlistUL').append('<li>'+playlistWine+'</li>');
          
@@ -269,9 +270,9 @@ $(function() {
       function getData(){
         var genre = $('#pickedGenre').val();
         var varietal = playlistArray[playlistIndex]
-        console.log(varietal);
-        console.log(playlistArray);
-        console.log(playlistIndex);
+        //console.log(varietal);
+        //console.log(playlistArray);
+        //console.log(playlistIndex);
 
         $.ajax({
           method: "GET",
