@@ -46,11 +46,15 @@ app.get("/", function(req, res){
 app.get("/searchMusic", function(req,res){
 	var varietal = req.query.varietal
 	db.Varietal.find({name: varietal}, function(error, varietals){
+		var url = "http://api.soundcloud.com/tracks.json?client_id="+ process.env.SOUNDCLOUD_SECRET +"&limit=50&q="+ req.query.genre;
+
+		if (!error && varietals.length && varietals.length > 0 && varietals[0].notes) {
+			url += "+" + varietals[0].notes[0];
+
+		}
 		console.log(varietals);
-		var url = "http://api.soundcloud.com/tracks.json?client_id="+ process.env.SOUNDCLOUD_SECRET +"&q="+ req.query.genre +"+"+ varietals[0].notes[0] +"&limit=50"
-	console.log(url);
-	request.get(url,
-		function(error, response, body){
+		console.log(url);
+		request.get(url, function(error, response, body){
 			if(error){
 				console.log(error)
 			} else{
@@ -74,10 +78,11 @@ app.get("/searchMusic", function(req,res){
 	        // log the request and respond with 406
 	        res.status(406).send('Not Acceptable');
 	    	}
-		});	
-	};
+		});
+		}	
+
 	});
-	})
+	});
 
 	
 });
