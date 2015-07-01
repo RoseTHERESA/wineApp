@@ -28,29 +28,47 @@ app.use(loginMiddleware);
 /****************** Wine Routes *******************/
 
 //Root Directory
-app.get("/", function(req, res){
-	var url = encodeURI("http://services.wine.com/api/beta2/service.svc/json/catalog?search="+req.query.winery+"+"+req.query.vintage+"+"+req.query.varietal+"&size=50&apikey=a16ee38c0befcddba3b69ff693aa5ece")
-	// console.log(url);
-	if(req.query.winery) {;
-	request.get(url,
-		function(error, response, body){
-			console.log(body);
-			if(error){
-				console.log(error)
-			} else{
-				var wineData = JSON.parse(body).Products.List;
-				if(wineData[0] == undefined){
-					console.log(wineData, "Looking at This")
-					res.render("layout", {wineData: "no results"})
-				} else {
-				  res.render("layout", {wineData:wineData, randomSong:musicArray[randomNumber]});
-				}
-			}
-	})
-    } else {
-     res.render("layout", {wineData: "Please Search", randomSong:"musicArray[randomNumber]"	})
-    }
+app.get("/", routeMiddleware.preventLoginSignup, function(req, res){
+     res.render("users/login");
 })
+
+app.get("/signup", routeMiddleware.preventLoginSignup, function(req, res){
+	res.render("users/signup");
+});
+
+app.post("/signup", function (req, res){
+	var newUser = req.body.user;
+	db.User.create(newUser, function (err, user){
+		if (user) {
+			req.login(user);
+			res.redirect("/vinobeats");
+		} else {
+			console.log(err);
+			res.render("users/signup")
+		}
+	});
+});
+
+app.post("/login", function (req, res){
+	db.User.authenticate(req.body.user,
+		function (err, user) {
+			if (!err && user !== null) {
+				req.login(user);
+				res.redirect("/vinobeats");
+			} else {
+				res.render("users/login");
+			}
+		});
+});
+
+app.get("/vinobeats", routeMiddleware.ensureLoggedIn, function(req,res){
+	res.render("layout");
+})
+
+app.get("/logout", function (req, res){
+	req.logout();
+	res.redirect("/")
+});
 
 /**************** Search Music *******************/
 

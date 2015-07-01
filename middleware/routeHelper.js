@@ -6,14 +6,14 @@ var routeHelpers = {
 			return next();
 		}
 		else {
-			res.redirect('/login');
+			res.redirect('/');
 		}
 	},
 
 	ensureCorrectUser: function(req, res, next){
 		db.Wine.findById(req.params.id, function(err,wine){
-			if (wine.ownerId !== req.session.id){
-				res.redirect('/');
+      if (wine.ownerId !== req.session.id) {
+        res.redirect('/');
 			}
 			else {
 				return next();
