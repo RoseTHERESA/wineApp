@@ -9,16 +9,31 @@ $(function() {
 		$.getJSON("/wines").done(function(data){
 			data.wines.forEach(function(wine){ //wine comes from the app.js routes
 				var html = wineHtml(wine);
-				$('body').append(html);
+				$('#userWines').before(html);
 			});
 			
 		});
 	}
 
 	function wineHtml(wine) {
-		return '<div class="allInfo"><br><div data-id="' + wine._id + '"><p><img src='+wine.image+'></p><a href="/wines/' + wine._id + '/">' + wine.name + 
-           '</a></p><p><b>Winery:</b> ' + wine.winery + '</p><p><b>Varietal:</b> ' + wine.varietal + '</p><p><b>Rating:</b> ' + wine.rating + '</p>' +
-           '<p><a href="/wines/' + wine._id + '/edit">Edit </a></p></div>' +'<br><input type="submit" value="Add to Playlist" id="playlistButton" class="btn btn-lg btn-success" data-varietal="'+ wine.varietal +'" data-name="'+ wine.name +'"></div>' 
+		return  '<div class="col-lg-3 col-md-6 text-center">' +
+                                        '<div class="service-box">' +
+                                            '<img class="labelImage" "column" src='+ wine.image +'>' +
+                                            '<h4>'+ wine.name +'</h4>' + 
+                                            '<p class="text-muted">'+ wine.winery +'</p>' +
+                                            '<p class="text-muted">'+ wine.varietal +'</p>' +
+                                            '<p class="text-muted">'+ wine.rating +' Points</p>' +
+                                              '<form action="/wines/'+wine._id+'?_method=DELETE" method="POST">' +
+                                                '<input class="text-muted btn btn-default" type="submit" value="Delete" value="DELETE">' +
+                                              '</form><br>' +
+                                            '<a href="#musicGenre" type="submit" class="btn btn-primary btn-xl page-scroll playlistButton" data-varietal="'+ wine.varietal +'" data-name="'+ wine.name +'">Add to Wine List!</a>'
+                                            //'<input type="submit" value="Add" class="btn btn-success btn-lg" id="playlistButton">' +
+                                        '</div>' +
+                                    '</div>'; 
+
+          // '<div class="allInfo" "container" col-lg-3 col-md-6 text-center" "service-box"><br><div data-id="' + wine._id + '"><p><img src='+wine.image+'></p><a href="/wines/' + wine._id + '/">' + wine.name + 
+          //  '</a></p><p><b>Winery:</b> ' + wine.winery + '</p><p><b>Varietal:</b> ' + wine.varietal + '</p><p><b>Rating:</b> ' + wine.rating + '</p>' +
+          //  '<p><a href="/wines/' + wine._id + '/edit">Edit </a></p></div>' +'<br><input type="submit" value="Add to Playlist" id="playlistButton" class="btn btn-lg btn-success" data-varietal="'+ wine.varietal +'" data-name="'+ wine.name +'"></div>' 
                
 	}
 
@@ -119,7 +134,7 @@ $(function() {
         dataType: 'json'
       }).done(function(data) {
    		var myhtml = wineHtml(data);
-   		$('body').append(myhtml);
+   		$('#userWines').before(html);
    		$('#newwineform').remove()
         console.log(data);
       });
@@ -145,10 +160,10 @@ $(function() {
                '<label for="winery">Winery: </label>' +
                '<input type="text" class="form-control" name="winery" id="winery" autofocus>' +
                '</div>' +
-               '<br><input type="submit" value="Add" class="btn btn-lg btn-success">' +
+               '<br><input type="submit" value="Search" class="btn btn-default btn-xl page-scroll">' +
                '</form>';
 
-    $('#newWinelink').after(html);
+    $('#newWineSearch').after(html);
 
     $('#newWineform').submit(function(e) {
       e.preventDefault();
@@ -173,25 +188,41 @@ $(function() {
            
            data.wineData.forEach(function(wine){
             if(wine.Labels){
-            var searchResults =  '<div class="searchInfo" "container" id="wineSearchResults">' + 
-                                  '<ul class="searchResults">' +
+            var searchResults =   
+                                    '<div class="col-lg-3 col-md-6 text-center searchInfo">' +
+                                        '<div class="service-box">' +
+                                            '<img class="labelImage" "column" src='+ wine.Labels[0].Url +'>' +
+                                            '<h4>'+ wine.Name +'</h4>' + 
+                                            '<p class="text-muted">'+ wine.Vineyard.Name +'</p>' +
+                                            '<p class="text-muted">'+ wine.Varietal.Name +'</p>' +
+                                            '<p class="text-muted">'+ wine.Ratings.HighestScore +' Points</p>' +
+                                            '<a href="#myWines" type="submit" id="favoriteButton" class="btn btn-primary btn-xl page-scroll">Drink!</a>'
+                                            // '<input type="submit" value="Add" class="btn btn-success btn-lg" id="favoriteButton">' +
+                                        '</div>' +
+                                    '</div>'; 
+
+
+
+                                 //  '<br>'+
+                                 //  '<div class="searchInfo" "container" id="wineSearchResults">' + 
+                                 //  '<ul class="searchResults">' +
       
-                                  '<li class="column"><img class="labelImage" "column" src='+ wine.Labels[0].Url +'></li>' +
-                                  '<li class="fancyOne" "column"><a href="/wines/"'+ wine.id + '">' + wine.Name +'</a></li>' +
-                                     // if(wine.Vineyard){ 
-                                  '<li class="fancyTwo" "column"><b>Vineyard: </b>'+ wine.Vineyard.Name +'</li>' +
-                                     // }
-                                     // if(wine.Varietal){ 
-                                  '<li class="fancyThree" "column" id="searchVarietal"><b>Varietal: </b>'+ wine.Varietal.Name +'</li>' +
-                                     // }
-                                  '<li class="fancyFour" "column"><b>Rating: </b>'+ wine.Ratings.HighestScore +'</li>' + 
-                                 '<li><input type="submit" value="Add to Favorites" class="btn btn-success btn-lg" id="favoriteButton"></li>' +
-                                  '</ul>' +
-                                  '</div>'
+                                 //  '<li class="column"><img class="labelImage" "column" src='+ wine.Labels[0].Url +'></li>' +
+                                 //  '<li class="fancyOne" "column"><a href="/wines/"'+ wine.id + '">' + wine.Name +'</a></li>' +
+                                 //     // if(wine.Vineyard){ 
+                                 //  '<li class="fancyTwo" "column"><b>Vineyard: </b>'+ wine.Vineyard.Name +'</li>' +
+                                 //     // }
+                                 //     // if(wine.Varietal){ 
+                                 //  '<li class="fancyThree" "column" id="searchVarietal"><b>Varietal: </b>'+ wine.Varietal.Name +'</li>' +
+                                 //     // }
+                                 //  '<li class="fancyFour" "column"><b>Rating: </b>'+ wine.Ratings.HighestScore +'</li>' + 
+                                 // '<li><input type="submit" value="Add" class="btn btn-success btn-lg" id="favoriteButton"></li>' +
+                                 //  '</ul>' +
+                                 //  '</div>'
                                      
 
                          
-              $('#wineData').after(searchResults)
+              $('#searchresultdata').after(searchResults)
               $("#favoriteButton").on("click", function(e){  
                 $('.searchInfo').remove();
 
@@ -215,7 +246,7 @@ $(function() {
                           dataType: 'json'
                         }).done(function(data) {
                           var myhtml = wineHtml(data);
-                          $('body').append(myhtml);
+                          $('#userWines').before(myhtml);
                           console.log("ITS POSTING!!");
                         });
                         //loadWines();
@@ -223,7 +254,7 @@ $(function() {
                 });
                
             }
-           });q
+           });
           
 
 
@@ -244,7 +275,7 @@ $(function() {
       // so let's make the body responsible for listening to that
       // we use event delegation to make sure that when dynamically added elements
       // are clicked on, we can still listen for them!
-        $('body').on("click", "#playlistButton", function(e){ 
+        $("body").on("click", ".playlistButton", function(e){ 
          console.log($(this).attr('data-varietal'));
          console.log($(this).attr('data-name'));
          playlistVarietal = $(this).attr('data-varietal');
@@ -254,7 +285,7 @@ $(function() {
          playlistWines.push(playlistWine); 
          console.log(playlistVarietal);
 
-         $('#playlistUL').append('<li>'+playlistWine+'</li>');
+         $('#playlistUL').append('<p>'+playlistWine+'<p>');
          
          // getData();
          
@@ -280,7 +311,7 @@ $(function() {
           dataType: 'json',
           success: function(data){
             $("#sc-widget").remove()
-            var $iframe = '<iframe class="player" id="sc-widget" src=https://w.soundcloud.com/player/?url=' + data + '&auto_play=true" width="30%" height="125" scrolling="no" frameborder="no"></iframe>'
+            var $iframe = '<iframe class="player" id="sc-widget" src=https://w.soundcloud.com/player/?url=' + data + '&auto_play=true" width="80%" height="175" scrolling="no" frameborder="no"></iframe>'
             $('#musicPlayer').after($iframe);
             widget = SC.Widget(document.getElementById('sc-widget'))
             widget.bind(SC.Widget.Events.FINISH, getData)
