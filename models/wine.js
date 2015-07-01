@@ -15,6 +15,7 @@ var wineSchema = new mongoose.Schema({
 	vineyard: String,
 	image: String,
 	rating: Number,
+	ownerId: String
 
 });
 

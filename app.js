@@ -203,6 +203,7 @@ app.post("/wines", function(req,res){
 	console.log("WE GOT HERE!")
 	console.log(req.body.wine)
 	var wine = new db.Wine(req.body.wine);
+	wine.ownerId = req.session.id;
 	//wine.ownerId = req.session.id
 	wine.save(function(err,wine){
 		console.log("ANY ERRORS?", err)
