@@ -13,7 +13,7 @@ var routeHelpers = {
 	ensureCorrectUser: function(req, res, next){
 		db.Wine.findById(req.params.id, function(err,wine){
       if (wine.ownerId !== req.session.id) {
-        res.redirect('/');
+        res.redirect('/vinobeats');
 			}
 			else {
 				return next();
@@ -23,7 +23,7 @@ var routeHelpers = {
 
 	preventLoginSignup: function(req, res, next){
 		if (req.session.id !== null && req.session.id !== undefined){
-			res.redirect('/');
+			res.redirect('/vinobeats');
 		}
 		else {
 			return next();

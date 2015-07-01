@@ -248,7 +248,7 @@ app.put("/wines/:id", function(req,res){
 			if(err){
 				res.render("wines/edit");
 			} else{
-				res.redirect("/");
+				res.redirect("/vinobeats");
 			}
 	});
 });
@@ -263,7 +263,7 @@ app.delete("/wines/:id", function(req,res){
 				res.render("wines/show");
 			} else{
 				wine.remove();
-				res.redirect("/");
+				res.redirect("/vinobeats");
 			}
 	});
 });
